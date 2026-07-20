@@ -1,0 +1,74 @@
+/* ---------------------------------------------------------------
+   design tokens
+   靈感來源:AST2600 QEMU 開機時捲動的序列埠 log —
+   近黑背景 + phosphor 綠(呼應 "Phosphor OpenBMC" 專案名稱本身)
+------------------------------------------------------------------ */
+:root {
+  --ink-000: #0a0d10;      /* 最底層背景 */
+  --ink-100: #12161a;      /* 面板背景 */
+  --ink-200: #1b2126;      /* 面板 hover / 次層 */
+  --line: #262e34;         /* 邊框、分隔線 */
+  --text-hi: #e7ecef;      /* 主要文字 */
+  --text-lo: #7d8890;      /* 次要文字 */
+  --phosphor: #3ddc84;     /* 品牌訊號綠,對應 OK / 正常狀態 */
+  --phosphor-dim: #1f6b45; /* 綠色的暗版,用於邊框、底色 */
+  --amber: #e8a23d;        /* Warning */
+  --red: #e5484d;          /* Critical */
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--ink-000);
+  color: var(--text-hi);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--phosphor-dim);
+  color: var(--text-hi);
+}
+
+:focus-visible {
+  outline: 2px solid var(--phosphor);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
