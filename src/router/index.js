@@ -33,6 +33,12 @@ const routes = [
     name: 'events',
     component: () => import('../views/EventLogView.vue'),
   },
+  {
+    // 沒有任何路由對得上的網址(打錯字、舊書籤等),一律導回首頁,
+    // 不讓使用者看到 Vue Router 本身的空白畫面。
+    path: '/:pathMatch(.*)*',
+    redirect: { name: 'dashboard' },
+  },
 ]
 
 const router = createRouter({
