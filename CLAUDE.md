@@ -82,6 +82,23 @@ src/
    `sessionStorage`(跟登入 session 同生命週期,關分頁即失效),對 stores/views
    完全透明,不需要知道自己在讀假資料。
 
+5. **Vercel 部署 + 正式站 CORS 代理**(`api/redfish/[...path].js` +
+   `vercel.json`)—— `vite.config.js` 的 `server.proxy` 只在本機 `npm run
+   dev` 的 Node process 有效,`vite build` 出來的 `dist/` 是純靜態檔案,部署到
+   Vercel 後沒有東西幫忙轉發 `/redfish/...`。這支 Serverless Function 扮演
+   跟 Vite proxy 一樣的角色:瀏覽器打同源的 `/redfish/...`(靠 `vercel.json`
+   的 `rewrites` 轉給 `/api/redfish/...`),function 在伺服器端把請求轉發到
+   `API_TARGET`(Vercel 專案的 Environment Variable,存放 ngrok 網址,**不要**
+   加 `VITE_` 前綴以免被打包進前端),回應(含 `X-Auth-Token`/`Location` 這些
+   `redfish.js` 依賴的 header)原封不動轉回去。因為是 server-to-server,瀏覽器
+   端完全不知道背後真正打到哪裡,不會觸發同源政策檢查。`vercel.json` 另外加了
+   SPA fallback(`/((?!api/).*) → /index.html`),因為 Vue Router 用
+   `createWebHistory`,直接用網址列進 `/systems` 這類子路由時需要伺服器端
+   fallback 到 `index.html`,不然 Vercel 靜態站會回 404。
+   ngrok 網址換掉時記得回 Vercel 專案設定更新 `API_TARGET` 並重新 deploy;
+   ngrok 免費方案有提供一個固定的 static domain 可以申請,申請後這個網址就不
+   會再變,可以省掉每次重開都要回來改設定的麻煩。
+
 ## 已知問題 / 待驗證
 
 - **Thermal/Power 可能根本沒抓到資料**:`bmc.sensorSummary()` 讀

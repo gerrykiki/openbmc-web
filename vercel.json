@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/redfish/:path*", "destination": "/api/redfish/:path*" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
